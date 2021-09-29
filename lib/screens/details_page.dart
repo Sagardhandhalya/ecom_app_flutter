@@ -148,7 +148,7 @@ class DetailsPage extends StatelessWidget {
                             const SizedBox(width: kDefaultPaddin),
                             Expanded(
                               child: Hero(
-                                tag: "${product.id}",
+                                tag: product.id,
                                 child: Image.asset(
                                   product.image,
                                   fit: BoxFit.fill,
