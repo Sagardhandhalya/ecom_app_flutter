@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './screens/home.dart';
+import './constant.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,14 +13,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: true,
-        title: 'Flutter 101',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: '/',
         routes: {
-          '/': (context) => const Home(),
+          '/': (context) => Home(),
         });
   }
 }
