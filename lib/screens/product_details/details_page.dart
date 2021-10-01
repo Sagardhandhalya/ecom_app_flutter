@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter101/modals/product.dart';
 
-import '../constant.dart';
+import '../../constant.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({Key? key, required this.product}) : super(key: key);
   final Product product;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final Color color = Color(product.color);
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: product.color,
+          backgroundColor: color,
+          iconTheme: const IconThemeData(color: Colors.white),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -29,7 +32,7 @@ class DetailsPage extends StatelessWidget {
             )
           ],
         ),
-        backgroundColor: product.color,
+        backgroundColor: color,
         body: SingleChildScrollView(
             child: Column(
           children: <Widget>[
@@ -71,9 +74,9 @@ class DetailsPage extends StatelessWidget {
                                 height: 50,
                                 width: 58,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(18),
+                                  borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                    color: product.color,
+                                    color: color,
                                   ),
                                 ),
                                 child: IconButton(
@@ -84,11 +87,14 @@ class DetailsPage extends StatelessWidget {
                               Expanded(
                                 child: SizedBox(
                                   height: 50,
-                                  child: FlatButton(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18)),
-                                    color: product.color,
+                                  child: ElevatedButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: color,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                    ),
                                     onPressed: () {},
                                     child: Text(
                                       "Buy  Now".toUpperCase(),
@@ -149,7 +155,7 @@ class DetailsPage extends StatelessWidget {
                             Expanded(
                               child: Hero(
                                 tag: product.id,
-                                child: Image.asset(
+                                child: Image.network(
                                   product.image,
                                   fit: BoxFit.fill,
                                 ),

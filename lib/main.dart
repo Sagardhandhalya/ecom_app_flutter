@@ -1,8 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import './screens/home.dart';
-import './constant.dart';
+import 'package:flutter101/screens/login/login.dart';
+import 'package:flutter101/services/auth_service.dart';
+import 'package:flutter101/theme.dart';
+import 'package:provider/provider.dart';
+import 'screens/Home/home.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -12,63 +19,37 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => Home(),
-        });
+    return MultiProvider(
+        providers: [
+          Provider<AuthService>(
+            create: (_) => AuthService(FirebaseAuth.instance),
+          ),
+          StreamProvider(
+              initialData: null,
+              create: (context) => context.read<AuthService>().authStateChanges)
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: MyTheme.lightTheme(context),
+          home: const AuthContainer(),
+          routes: {
+            '/home': (context) => const Home(),
+            '/login': (context) => const Login()
+          },
+        ));
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class AuthContainer extends StatelessWidget {
+  const AuthContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    final firebaseUser = context.watch<User?>();
+    if (firebaseUser != null) {
+      return const Home();
+    } else {
+      return const Login();
+    }
   }
 }

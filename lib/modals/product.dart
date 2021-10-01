@@ -1,18 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Product {
   final String image, title, description;
-  final int price, size, id;
-  final Color color;
+  final int price, id, color;
+
   Product({
     required this.id,
     required this.image,
     required this.title,
     required this.price,
     required this.description,
-    required this.size,
     required this.color,
   });
+
+  factory Product.fromDocument(DocumentSnapshot doc) {
+    print(doc.get('id'));
+    return Product(
+        id: doc.get('id'),
+        image: doc.get('image'),
+        title: doc.get('title'),
+        price: doc.get('price'),
+        description: doc.get('description'),
+        color: doc.get('color'));
+  }
 }
 
 List<Product> products = [
@@ -20,51 +31,45 @@ List<Product> products = [
       id: 1,
       title: "Office Code",
       price: 234,
-      size: 12,
       description: dummyText,
       image: "assets/images/bag_1.png",
-      color: const Color(0xFF3D82AE)),
+      color: 4282221230),
   Product(
-      id: 2,
-      title: "Belt Bag",
-      price: 234,
-      size: 8,
-      description: dummyText,
-      image: "assets/images/bag_2.png",
-      color: const Color(0xFFD3A984)),
+    id: 2,
+    title: "Belt Bag",
+    price: 234,
+    description: dummyText,
+    image: "assets/images/bag_2.png",
+    color: 4282221230,
+  ),
   Product(
       id: 3,
       title: "Hang Top",
       price: 234,
-      size: 10,
       description: dummyText,
       image: "assets/images/bag_3.png",
-      color: const Color(0xFF989493)),
+      color: 4282221230),
   Product(
       id: 4,
       title: "Old Fashion",
       price: 234,
-      size: 11,
       description: dummyText,
       image: "assets/images/bag_4.png",
-      color: const Color(0xFFE6B398)),
+      color: 4282221230),
   Product(
       id: 5,
       title: "Office Code",
       price: 234,
-      size: 12,
       description: dummyText,
       image: "assets/images/bag_5.png",
-      color: const Color(0xFFFB7883)),
+      color: 4282221230),
   Product(
-    id: 6,
-    title: "Office Code",
-    price: 234,
-    size: 12,
-    description: dummyText,
-    image: "assets/images/bag_6.png",
-    color: const Color(0xFFAEAEAE),
-  ),
+      id: 6,
+      title: "Office Code",
+      price: 234,
+      description: dummyText,
+      image: "assets/images/bag_6.png",
+      color: 4282221230),
 ];
 
 String dummyText =

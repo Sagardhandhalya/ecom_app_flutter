@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './../constant.dart';
+import '../../../constant.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({
@@ -46,13 +46,15 @@ class _CategoryListState extends State<CategoryList> {
             children: [
               Text(
                 category[index],
-                style:
-                    const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 17, color: Colors.black87),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Container(
                 height: 5,
                 width: 40,
-                color: index == _selected ? Colors.black : Colors.transparent,
+                color: index == _selected ? Colors.black87 : Colors.transparent,
               )
             ],
           ),
