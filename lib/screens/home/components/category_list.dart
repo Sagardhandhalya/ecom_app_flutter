@@ -2,24 +2,31 @@ import 'package:flutter/material.dart';
 import '../../../constant.dart';
 
 class CategoryList extends StatefulWidget {
-  const CategoryList({
-    Key? key,
-  }) : super(key: key);
-
+  final Function changeCategory;
+  const CategoryList({Key? key, required this.changeCategory})
+      : super(key: key);
   @override
   State<CategoryList> createState() => _CategoryListState();
 }
 
 class _CategoryListState extends State<CategoryList> {
   final List<String> category = [
-    'Hand Bags',
-    'Mobile phone',
-    'Jwelory',
-    'Shoews',
+    'bags',
+    'phone',
+    'jewellery',
+    'shoes',
     'clothes'
   ];
 
   int _selected = 0;
+
+  Function changeCategory = () {};
+  @override
+  void initState() {
+    super.initState();
+    changeCategory = widget.changeCategory;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -36,6 +43,7 @@ class _CategoryListState extends State<CategoryList> {
         onTap: () {
           setState(() {
             _selected = index;
+            changeCategory(category[index]);
           });
         },
         child: Padding(

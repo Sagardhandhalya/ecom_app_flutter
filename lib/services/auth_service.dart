@@ -1,16 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter101/modals/app_user.dart';
+import 'package:flutter101/services/firestore_service.dart';
 
 class AuthService {
-  final String samir = "my name is sagar";
   final FirebaseAuth _auth;
-  AuthService(this._auth);
+  final FireStoreService _firestoreService;
+  AuthService(this._auth, this._firestoreService);
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  Future<String> signUp(String email, String password) async {
+  Future<String> signUp(
+      String email, String password, String fullName, String userRole) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      var authResult = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+
+      await _firestoreService
+          .createUser(AppUser(authResult.user!.uid, email, fullName, userRole));
+
       return 'success';
     } on FirebaseAuthException catch (e) {
       return e.message!;
@@ -20,6 +27,7 @@ class AuthService {
   Future<String> signIn(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+
       return 'success';
     } on FirebaseAuthException catch (e) {
       return e.message!;

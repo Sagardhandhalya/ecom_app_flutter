@@ -27,7 +27,10 @@ class _LoginState extends State<Login> {
       if (sam == 'success') {
         await Navigator.pushNamed(context, '/');
       } else {
-        print('some error accured: $sam');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(sam),
+          duration: const Duration(seconds: 3),
+        ));
       }
 
       setState(() {
@@ -105,12 +108,12 @@ class _LoginState extends State<Login> {
               loginButton(context),
               TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const SignUp()));
                   },
-                  child: Text('Do not have account? create one. '))
+                  child: const Text('Do not have account? create one. '))
             ],
           ),
         ),

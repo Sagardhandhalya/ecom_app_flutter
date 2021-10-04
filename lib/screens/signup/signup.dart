@@ -12,6 +12,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final emailController = TextEditingController();
+  final fullNameController = TextEditingController();
   final passwordController = TextEditingController();
   final confpasswordController = TextEditingController();
   bool _buttonState = false;
@@ -22,13 +23,18 @@ class _SignUpState extends State<SignUp> {
       setState(() {
         _buttonState = true;
       });
-      String sam = await context
-          .read<AuthService>()
-          .signUp(emailController.text, passwordController.text);
+      String sam = await context.read<AuthService>().signUp(
+          emailController.text,
+          passwordController.text,
+          fullNameController.text,
+          'user');
       if (sam == 'success') {
         await Navigator.pushNamed(context, '/');
       } else {
-        print('some error accured');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(sam),
+          duration: const Duration(seconds: 3),
+        ));
       }
 
       setState(() {
@@ -57,6 +63,25 @@ class _SignUpState extends State<SignUp> {
               ),
               const SizedBox(
                 height: 15,
+              ),
+              TextFormField(
+                controller: fullNameController,
+                decoration: const InputDecoration(
+                    hintText: 'full name',
+                    icon: Icon(
+                      Icons.email_outlined,
+                      color: Colors.deepPurple,
+                    ),
+                    labelText: "full name"),
+                validator: (value) {
+                  if (value!.isEmpty == true) {
+                    return 'enter valid email id';
+                  }
+                },
+                onChanged: (value) {},
+              ),
+              const SizedBox(
+                height: 20,
               ),
               TextFormField(
                 controller: emailController,

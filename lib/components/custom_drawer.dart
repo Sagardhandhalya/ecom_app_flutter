@@ -12,8 +12,9 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? currentUser = context.watch<User>();
-    final username = currentUser?.displayName ?? "User Name";
-    final photoUrl = currentUser?.photoURL ?? "";
+
+    final String photoUrl =
+        currentUser?.photoURL ?? 'assets/images/demo_avtar.png';
 
     return Drawer(
       child: ListView(
@@ -21,10 +22,10 @@ class CustomDrawer extends StatelessWidget {
           DrawerHeader(
               padding: EdgeInsets.zero,
               child: UserAccountsDrawerHeader(
-                accountName: Text(username),
+                accountName: const Text(''),
                 accountEmail: Text('${currentUser?.email}'),
-                currentAccountPicture: const CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/demo_avtar.png'),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: AssetImage(photoUrl),
                 ),
               )),
           ListTile(

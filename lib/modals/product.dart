@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class Product {
   final String image, title, description;
@@ -15,7 +14,6 @@ class Product {
   });
 
   factory Product.fromDocument(DocumentSnapshot doc) {
-    print(doc.get('id'));
     return Product(
         id: doc.get('id'),
         image: doc.get('image'),
