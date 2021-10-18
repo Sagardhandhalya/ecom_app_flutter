@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter101/components/custom_drawer.dart';
+import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/screens/cart/cart_page.dart';
+import 'package:flutter101/services/firestore_service.dart';
+import 'package:provider/provider.dart';
 import '../../modals/product.dart';
 import '../home/components/category_list.dart';
 import '../product_details/details_page.dart';
@@ -17,9 +20,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String _category = 'bags';
-
-  final Stream<QuerySnapshot> _productStream =
-      FirebaseFirestore.instance.collection('products').snapshots();
 
   MaterialColor col(int x) {
     return x % 2 == 0 ? Colors.amber : Colors.yellow;
@@ -42,8 +42,7 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Cart()));
+                Navigator.pushNamed(context, '/cart');
               },
               icon: const Icon(
                 Icons.shopping_cart_outlined,
@@ -60,16 +59,15 @@ class _HomeState extends State<Home> {
             children: [
               CategoryList(changeCategory: changeCategory),
               StreamBuilder<QuerySnapshot>(
-                  stream: _productStream,
+                  stream: Provider.of<FireStoreService>(context)
+                      .getProductsStream(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasError) {
-                      return SnackBar(
-                        content: const Text('you are osm !!'),
-                        duration: const Duration(seconds: 4),
-                        action:
-                            SnackBarAction(label: 'Action', onPressed: () {}),
-                      );
+                      return const CustomSnackBar(
+                          seconds: 4,
+                          text: 'not able to load data',
+                          type: 'error');
                     }
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -98,9 +96,14 @@ class _HomeState extends State<Home> {
                                 context,
                                 index,
                                 snapshot.data!.docs
-                                    .where((element) =>
-                                        element.get('category') == _category)
-                                    .toList())));
+                                        .where(
+                                            (element) =>
+                                                element.get('category') ==
+                                                _category)
+                                        .toList()
+                                    as List<
+                                        QueryDocumentSnapshot<
+                                            Map<String, dynamic>>>)));
                   }),
             ],
           ),
@@ -108,7 +111,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildProductCard(BuildContext context, int index,
-      List<QueryDocumentSnapshot<Object?>> snapshot) {
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> snapshot) {
     var product = Product.fromDocument(snapshot[index]);
 
     return GestureDetector(
@@ -116,7 +119,11 @@ class _HomeState extends State<Home> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => DetailsPage(product: product)));
+                builder: (context) => DetailsPage(
+                      product: product,
+                      productUid: snapshot[index].id,
+                    ),
+                settings: RouteSettings(name: "${product.title} page")));
       },
       child: Column(
         children: [

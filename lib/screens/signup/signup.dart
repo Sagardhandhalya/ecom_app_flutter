@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/screens/login/login.dart';
 import 'package:flutter101/services/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -23,18 +24,15 @@ class _SignUpState extends State<SignUp> {
       setState(() {
         _buttonState = true;
       });
-      String sam = await context.read<AuthService>().signUp(
+      String status = await context.read<AuthService>().signUp(
           emailController.text,
           passwordController.text,
           fullNameController.text,
           'user');
-      if (sam == 'success') {
+      if (status == 'success') {
         await Navigator.pushNamed(context, '/');
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(sam),
-          duration: const Duration(seconds: 3),
-        ));
+        CustomSnackBar(seconds: 4, text: status, type: 'error').show(context);
       }
 
       setState(() {

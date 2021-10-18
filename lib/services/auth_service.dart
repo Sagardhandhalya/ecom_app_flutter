@@ -4,8 +4,7 @@ import 'package:flutter101/services/firestore_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth;
-  final FireStoreService _firestoreService;
-  AuthService(this._auth, this._firestoreService);
+  AuthService(this._auth);
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
@@ -14,10 +13,6 @@ class AuthService {
     try {
       var authResult = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-
-      await _firestoreService
-          .createUser(AppUser(authResult.user!.uid, email, fullName, userRole));
-
       return 'success';
     } on FirebaseAuthException catch (e) {
       return e.message!;

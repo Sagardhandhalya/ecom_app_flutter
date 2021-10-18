@@ -1,15 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/modals/product.dart';
+import 'package:flutter101/services/firestore_service.dart';
+import 'package:provider/src/provider.dart';
 
 import '../../constant.dart';
 
 class DetailsPage extends StatelessWidget {
-  const DetailsPage({Key? key, required this.product}) : super(key: key);
+  final String productUid;
   final Product product;
+
+  const DetailsPage({Key? key, required this.product, required this.productUid})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    String uid = Provider.of<User>(context, listen: false).uid;
     final Color color = Color(product.color);
     return Scaffold(
         appBar: AppBar(
@@ -24,13 +32,6 @@ class DetailsPage extends StatelessWidget {
               Icons.arrow_back,
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.shopping_cart_outlined),
-              tooltip: 'Go to the next page',
-            )
-          ],
         ),
         backgroundColor: color,
         body: SingleChildScrollView(
@@ -81,7 +82,23 @@ class DetailsPage extends StatelessWidget {
                                 ),
                                 child: IconButton(
                                   icon: const Icon(Icons.shopping_cart),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    context
+                                        .read<FireStoreService>()
+                                        .addToCart(uid, productUid)
+                                        .then((value) => const CustomSnackBar(
+                                              seconds: 4,
+                                              type: '',
+                                              text: 'product added to the cart',
+                                            ).show(context))
+                                        .catchError(
+                                            (error) => const CustomSnackBar(
+                                                  seconds: 4,
+                                                  type: 'error',
+                                                  text:
+                                                      'some error occured try again.',
+                                                ).show(context));
+                                  },
                                 ),
                               ),
                               Expanded(
