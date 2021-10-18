@@ -57,8 +57,12 @@ class Cart extends StatelessWidget {
                   }
                   AppUser userData = AppUser.fromDocument(
                       snapshot.data as DocumentSnapshot<Map<String, dynamic>>);
+
+                  List<String> keyArr = userData.cart.keys.toList();
+                  List<int> valArr = userData.cart.values.toList();
+
                   return ListView.builder(
-                      itemCount: userData.cart.length,
+                      itemCount: keyArr.length,
                       padding: const EdgeInsets.all(5.0),
                       itemBuilder: (context, i) {
                         return Dismissible(
@@ -66,7 +70,8 @@ class Cart extends StatelessWidget {
                           onDismissed: (direction) {
                             Provider.of<FireStoreService>(context,
                                     listen: false)
-                                .deleteFromTheCart(uid, userData.cart[i]);
+                                .deleteFromTheCart(
+                                    uid, userData.cart.keys.toList()[i]);
                             const CustomSnackBar(
                                     seconds: 4,
                                     text: 'Item deleted',
@@ -79,8 +84,7 @@ class Cart extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: FutureBuilder<Product>(
-                                  future: fetchProduct(
-                                      userData.cart[i]['productId']),
+                                  future: fetchProduct(keyArr[i]),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
@@ -115,14 +119,19 @@ class Cart extends StatelessWidget {
                                                               listen: false)
                                                           .updateQty(
                                                               uid,
-                                                              userData.cart[i],
-                                                              true);
+                                                              keyArr[i],
+                                                              true,
+                                                              valArr[i]);
                                                     },
                                                     icon: const Icon(
                                                       Icons.add,
                                                     )),
                                                 Text(
-                                                    '${userData.cart[i]["q"]}'),
+                                                  '${valArr[i]}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1,
+                                                ),
                                                 IconButton(
                                                     onPressed: () {
                                                       Provider.of<FireStoreService>(
@@ -130,12 +139,12 @@ class Cart extends StatelessWidget {
                                                               listen: false)
                                                           .updateQty(
                                                               uid,
-                                                              userData.cart[i],
-                                                              false);
+                                                              keyArr[i],
+                                                              false,
+                                                              valArr[i]);
                                                     },
                                                     icon: const Icon(
-                                                      Icons.bar_chart,
-                                                    ))
+                                                        Icons.remove))
                                               ],
                                             )
                                           ],
@@ -145,7 +154,7 @@ class Cart extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                "\$ ${snapshot.data!.price * userData.cart[i]["q"]}",
+                                                "\$ ${snapshot.data!.price * (valArr[i])}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline6,
@@ -155,8 +164,10 @@ class Cart extends StatelessWidget {
                                                     Provider.of<FireStoreService>(
                                                             context,
                                                             listen: false)
-                                                        .deleteFromTheCart(uid,
-                                                            userData.cart[i]);
+                                                        .deleteFromTheCart(
+                                                            uid,
+                                                            userData.cart.keys
+                                                                .toList()[i]);
                                                   },
                                                   icon: const Icon(
                                                     Icons.delete,
