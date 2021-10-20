@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter101/modals/app_user.dart';
+import 'package:flutter101/models/app_user.dart';
 import 'package:flutter101/screens/Home/home.dart';
 import 'package:flutter101/services/auth_service.dart';
+import 'package:flutter101/services/firebase_storage_service.dart';
 import 'package:flutter101/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,6 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String uid = Provider.of<User>(context, listen: false).uid;
-    //  'assets/images/demo_avtar.png';
 
     return Drawer(
         child: ListView(
@@ -23,23 +23,28 @@ class CustomDrawer extends StatelessWidget {
             future:
                 Provider.of<FireStoreService>(context).getCurrentUserInfo(uid),
             builder: (context, currentUser) {
-              // print(currentUser.data!.toJson());
               if (currentUser.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (currentUser.hasError) {
                 return const Center(child: Text('failed to fetch data'));
               }
+              String photoUrl = currentUser.data!.photoUrl ??
+                  'https://firebasestorage.googleapis.com/v0/b/flutter-firebase-demo-c5029.appspot.com/o/profilePhotos%2FN8xzsP5bB7ZGSsiuDOHcBLqHbG43.png?alt=media&token=f7d27795-68c6-484e-9fc5-db1cf906d6d6';
               return DrawerHeader(
                   padding: EdgeInsets.zero,
                   child: UserAccountsDrawerHeader(
-                    accountName: const Text(''),
-                    accountEmail: Text(currentUser.data!.email),
-                    currentAccountPicture: const CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/images/demo_avtar.png'),
-                    ),
-                  ));
+                      accountName: Text(currentUser.data!.fullName),
+                      accountEmail: Text(currentUser.data!.email),
+                      currentAccountPicture: CircleAvatar(
+                          backgroundImage: NetworkImage(photoUrl))));
             }),
+        ListTile(
+          leading: const Icon(Icons.account_circle),
+          title: const Text('Profile'),
+          onTap: () {
+            Navigator.pushNamed(context, '/profile');
+          },
+        ),
         ListTile(
           leading: const Icon(Icons.home),
           title: const Text('Home'),

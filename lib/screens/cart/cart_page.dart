@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter101/components/custom_drawer.dart';
 import 'package:flutter101/components/snackbar.dart';
-import 'package:flutter101/modals/app_user.dart';
-import 'package:flutter101/modals/product.dart';
+import 'package:flutter101/models/app_user.dart';
+import 'package:flutter101/models/product.dart';
 import 'package:flutter101/screens/login/login.dart';
 import 'package:flutter101/services/firestore_service.dart';
 import 'package:provider/provider.dart';
@@ -12,12 +12,12 @@ import 'package:provider/provider.dart';
 class Cart extends StatelessWidget {
   const Cart({Key? key}) : super(key: key);
 
+  Future<Product> fetchProduct(String id, BuildContext context) async {
+    return Provider.of<FireStoreService>(context).getProductFromId(id);
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future<Product> fetchProduct(String id) async {
-      return Provider.of<FireStoreService>(context).getProductFromId(id);
-    }
-
     String? uid = Provider.of<User?>(context, listen: false)?.uid;
     return uid == null
         ? const Login()
@@ -52,6 +52,7 @@ class Cart extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
+
                   if (!snapshot.hasData) {
                     return const CircularProgressIndicator();
                   }
@@ -84,7 +85,7 @@ class Cart extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: FutureBuilder<Product>(
-                                  future: fetchProduct(keyArr[i]),
+                                  future: fetchProduct(keyArr[i], context),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
@@ -101,14 +102,15 @@ class Cart extends StatelessWidget {
                                           height: 100,
                                         ),
                                         Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               snapshot.data!.title,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline6,
+                                            ),
+                                            const SizedBox(
+                                              height: 2,
                                             ),
                                             Row(
                                               children: [

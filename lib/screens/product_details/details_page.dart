@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter101/components/snackbar.dart';
-import 'package:flutter101/modals/product.dart';
+import 'package:flutter101/models/product.dart';
 import 'package:flutter101/services/firestore_service.dart';
 import 'package:provider/src/provider.dart';
 

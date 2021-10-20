@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter101/modals/app_user.dart';
-import 'package:flutter101/modals/product.dart';
-import 'package:flutter101/modals/app_user.dart';
+import 'package:flutter101/models/app_user.dart';
+import 'package:flutter101/models/product.dart';
 
 class FireStoreService {
   final CollectionReference _userCollectionRef =
@@ -20,15 +19,20 @@ class FireStoreService {
     return Product.fromDocument(p);
   }
 
-  Stream<QuerySnapshot> getProductsStream() {
-    return FirebaseFirestore.instance.collection('products').snapshots();
+  List<Product> _productListFromSnapShot(
+      QuerySnapshot<Map<String, dynamic>> q) {
+    return q.docs.map((doc) => Product.fromDocument(doc)).toList();
   }
 
-  Stream<QuerySnapshot> getProductsOfACategory() {
-    return FirebaseFirestore.instance.collection('products').snapshots();
+  Stream<List<Product>> getProductsStream() {
+    return FirebaseFirestore.instance
+        .collection('products')
+        .snapshots()
+        .map<List<Product>>(_productListFromSnapShot);
   }
 
   Future<AppUser> getCurrentUserInfo(String uid) async {
+    print(uid);
     var x = await FirebaseFirestore.instance.collection('users').doc(uid).get();
     return AppUser.fromDocument(x);
   }
@@ -43,29 +47,27 @@ class FireStoreService {
 
   Future<void> addToCart(String uid, String productUid) async {
     return _userCollectionRef.doc(uid).set({
-      'cart': FieldValue.arrayUnion([
-        {'productId': productUid, 'q': 1}
-      ])
+      'cart': {productUid: 1}
     }, SetOptions(merge: true));
   }
 
-  Future<void> deleteFromTheCart(String uid, Map<String, dynamic> p) async {
+  Future<void> deleteFromTheCart(String uid, String p) async {
     return _userCollectionRef.doc(uid).set({
-      'cart': FieldValue.arrayRemove([p])
+      'cart': {p: FieldValue.delete()}
     }, SetOptions(merge: true));
   }
 
-  Future<void> updateQty(String uid, Map<String, dynamic> p, bool isAdd) async {
+  Future<void> updateQty(String uid, String p, bool isAdd, int val) async {
+    return _userCollectionRef.doc(uid).set({
+      'cart': {p: FieldValue.increment(isAdd ? 1 : (val > 1 ? -1 : 0))}
+    }, SetOptions(merge: true));
+  }
+
+  // update profile photo of a user
+
+  Future<void> updateProfilePhoto(String uid, String url) {
     return _userCollectionRef
         .doc(uid)
-        .set({'car[0].q': FieldValue.increment(1)}, SetOptions(merge: true));
+        .set({'photoUrl': url}, SetOptions(merge: true));
   }
 }
-
-
-// arrayUnion([
-//         {
-//           'productId': p['productId'],
-//           'q': isAdd ? p['q'] + 1 : (p['q'] > 1 ? p['q'] - 1 : p['q'])
-//         }
-//       ])

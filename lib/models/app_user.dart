@@ -11,22 +11,22 @@ class AppUser {
   factory AppUser.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc) {
     var data = doc.data() as Map<String, dynamic>;
     return AppUser(
-        data['id'],
-        data['email'],
-        data['fullName'],
-        data['userRole'],
+        data['id']! as String,
+        data['email']! as String,
+        data['fullName']! as String,
+        data['userRole']! as String,
         data['photoUrl'],
-        Map<String, int>.from(data['cart']));
+        Map<String, int>.from(data['cart']! as Map<dynamic, dynamic>));
   }
-  AppUser.fromJson(Map<String, Object?> json)
-      : this(
-          json['id']! as String,
-          json['email']! as String,
-          json['fullName']! as String,
-          json['userRole']! as String,
-          json['photoUrl']! as String,
-          Map<String, int>.from(json['cart']! as Map<dynamic, dynamic>),
-        );
+  // AppUser.fromJson(Map<String, Object?> json)
+  //     : this(
+  //         json['id']! as String,
+  //         json['email']! as String,
+  //         json['fullName']! as String,
+  //         json['userRole']! as String,
+  //         json['photoUrl']! as String,
+  //         Map<String, int>.from(json['cart']! as Map<dynamic, dynamic>),
+  //       );
 
   Map<String, dynamic> toJson() {
     return {

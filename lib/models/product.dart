@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Product {
-  final String image, title, description, category;
-  final int price, id, color;
+  final String image, title, description, category, id;
+  final int price, color;
   final List<Product> _products = [];
 
   Product(

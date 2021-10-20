@@ -6,7 +6,7 @@ import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/screens/cart/cart_page.dart';
 import 'package:flutter101/services/firestore_service.dart';
 import 'package:provider/provider.dart';
-import '../../modals/product.dart';
+import '../../models/product.dart';
 import '../home/components/category_list.dart';
 import '../product_details/details_page.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -58,11 +58,11 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CategoryList(changeCategory: changeCategory),
-              StreamBuilder<QuerySnapshot>(
+              StreamBuilder<List<Product>>(
                   stream: Provider.of<FireStoreService>(context)
                       .getProductsStream(),
                   builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                      AsyncSnapshot<List<Product>> snapshot) {
                     if (snapshot.hasError) {
                       return const CustomSnackBar(
                           seconds: 4,
@@ -73,18 +73,16 @@ class _HomeState extends State<Home> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    if (snapshot.data!.docs
-                        .where(
-                            (element) => element.get('category') == _category)
+                    if (snapshot.data!
+                        .where((p) => p.category == _category)
                         .isEmpty) {
                       return Center(
                           child: Text('No Product in $_category category'));
                     }
                     return Expanded(
                         child: GridView.builder(
-                            itemCount: snapshot.data!.docs
-                                .where((element) =>
-                                    element.get('category') == _category)
+                            itemCount: snapshot.data!
+                                .where((p) => p.category == _category)
                                 .length,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
@@ -95,24 +93,18 @@ class _HomeState extends State<Home> {
                             itemBuilder: (context, index) => buildProductCard(
                                 context,
                                 index,
-                                snapshot.data!.docs
-                                        .where(
-                                            (element) =>
-                                                element.get('category') ==
-                                                _category)
-                                        .toList()
-                                    as List<
-                                        QueryDocumentSnapshot<
-                                            Map<String, dynamic>>>)));
+                                snapshot.data!
+                                    .where((p) => p.category == _category)
+                                    .toList())));
                   }),
             ],
           ),
         ));
   }
 
-  Widget buildProductCard(BuildContext context, int index,
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> snapshot) {
-    var product = Product.fromDocument(snapshot[index]);
+  Widget buildProductCard(
+      BuildContext context, int index, List<Product> snapshot) {
+    var product = snapshot[index];
 
     return GestureDetector(
       onTap: () {
@@ -121,7 +113,7 @@ class _HomeState extends State<Home> {
             MaterialPageRoute(
                 builder: (context) => DetailsPage(
                       product: product,
-                      productUid: snapshot[index].id,
+                      productUid: product.id.toString(),
                     ),
                 settings: RouteSettings(name: "${product.title} page")));
       },

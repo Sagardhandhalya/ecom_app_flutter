@@ -47,10 +47,6 @@ class _LoginState extends State<Login> {
           key: _formKey,
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/login.png',
-                height: 200,
-              ),
               const SizedBox(
                 height: 50,
               ),
@@ -110,7 +106,19 @@ class _LoginState extends State<Login> {
                         MaterialPageRoute(
                             builder: (context) => const SignUp()));
                   },
-                  child: const Text('Do not have account? create one. '))
+                  child: const Text('Do not have account? create one. ')),
+              TextButton.icon(
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.teal,
+                    onSurface: Colors.grey,
+                  ),
+                  onPressed: () {
+                    Provider.of<AuthService>(context, listen: false)
+                        .signInwithGoogle();
+                  },
+                  icon: Icon(Icons.login_rounded),
+                  label: Text('Sign In With Google'))
             ],
           ),
         ),
