@@ -7,8 +7,8 @@ class MyTheme {
         appBarTheme: const AppBarTheme(
           color: Colors.white,
           elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black54),
-          titleTextStyle: TextStyle(color: Colors.black54, fontSize: 20),
+          iconTheme: IconThemeData(color: Colors.black),
+          titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: const TextTheme(

@@ -107,18 +107,53 @@ class _LoginState extends State<Login> {
                             builder: (context) => const SignUp()));
                   },
                   child: const Text('Do not have account? create one. ')),
-              TextButton.icon(
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: Colors.teal,
-                    onSurface: Colors.grey,
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipOval(
+                    child: Material(
+                      color: Colors.white, // button color
+                      child: InkWell(
+                        splashColor: Colors.red, // inkwell color
+                        child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: Image.network(
+                                'http://pngimg.com/uploads/google/google_PNG19635.png',
+                                fit: BoxFit.cover)),
+                        onTap: () {
+                          Provider.of<AuthService>(context, listen: false)
+                              .signInwithGoogle();
+                        },
+                      ),
+                    ),
                   ),
-                  onPressed: () {
-                    Provider.of<AuthService>(context, listen: false)
-                        .signInwithGoogle();
-                  },
-                  icon: Icon(Icons.login_rounded),
-                  label: Text('Sign In With Google'))
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  ClipOval(
+                    child: Material(
+                      color: Colors.white, // button color
+                      child: InkWell(
+                        splashColor: Colors.red, // inkwell color
+                        child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: Image.network(
+                                'https://www.citypng.com/public/uploads/small/115959785735k3xem706hpfn8xbwxmxvniimtfuxtbng596dmpcylbi7ckrlbew28e6oodqlocogsjo8hg0g5j2ofx0km0lu1ynotna9tsu5xdk.png',
+                                fit: BoxFit.cover)),
+                        onTap: () {
+                          Provider.of<AuthService>(context, listen: false)
+                              .signInwithGoogle();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
