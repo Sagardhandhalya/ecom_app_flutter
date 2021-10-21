@@ -19,16 +19,16 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
         child: ListView(
       children: [
-        FutureBuilder<AppUser>(
-            future:
+        StreamBuilder<AppUser?>(
+            stream:
                 Provider.of<FireStoreService>(context).getCurrentUserInfo(uid),
             builder: (context, currentUser) {
               if (currentUser.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (currentUser.hasError) {
+              } else if (currentUser.hasError || currentUser.data == null) {
                 return const Center(child: Text('failed to fetch data'));
               }
-              String photoUrl = currentUser.data!.photoUrl ??
+              String photoUrl = currentUser.data!.photoURL ??
                   'https://firebasestorage.googleapis.com/v0/b/flutter-firebase-demo-c5029.appspot.com/o/profilePhotos%2FN8xzsP5bB7ZGSsiuDOHcBLqHbG43.png?alt=media&token=f7d27795-68c6-484e-9fc5-db1cf906d6d6';
               return DrawerHeader(
                   padding: EdgeInsets.zero,

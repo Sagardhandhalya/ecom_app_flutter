@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter101/components/custom_drawer.dart';
 import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/services/firebase_storage_service.dart';
 import 'package:flutter101/services/firestore_service.dart';
@@ -187,10 +186,11 @@ class _ProfileState extends State<Profile> {
                 type: 'success')
             .show(context);
       });
-    } else {
-      const CustomSnackBar(
-              seconds: 2, text: 'something went wrong', type: 'error')
-          .show(context);
     }
+    // else {
+    //   const CustomSnackBar(
+    //           seconds: 2, text: 'No image is selected, try ga', type: 'error')
+    //       .show(context);
+    // }
   }
 }

@@ -58,11 +58,10 @@ class DetailsPage extends StatelessWidget {
                     ),
                     child: Column(
                       children: <Widget>[
-                        const Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: kDefaultPaddin),
-                          child: Text(
-                              "onVerticalDragStart A pointer has contacted the screen and might direction.onVerticalDragEndA pointer that was previously in contact with the screen and moving vertically is no longer in contact with the screen and was moving at a specific velocity when it stopped contacting the scre"),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                          height: 100,
+                          child: Text(product.description),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(

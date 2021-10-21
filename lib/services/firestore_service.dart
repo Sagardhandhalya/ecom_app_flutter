@@ -12,11 +12,26 @@ class FireStoreService {
     return FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
   }
 
-  Future<Product> getProductFromId(String id) async {
-    var p =
-        await FirebaseFirestore.instance.collection('products').doc(id).get();
+  Product? _productFromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
+    Map<String, dynamic>? data = doc.data();
+    if (data != null) {
+      return Product(
+          id: doc.id,
+          image: data['image'],
+          title: data['title'],
+          price: data['price'],
+          description: data['description'],
+          color: data['color'],
+          category: data['category']);
+    }
+  }
 
-    return Product.fromDocument(p);
+  Stream<Product?> getProductFromId(String id) {
+    return FirebaseFirestore.instance
+        .collection('products')
+        .doc(id)
+        .snapshots()
+        .map<Product?>(_productFromSnapshot);
   }
 
   List<Product> _productListFromSnapShot(
@@ -31,10 +46,27 @@ class FireStoreService {
         .map<List<Product>>(_productListFromSnapShot);
   }
 
-  Future<AppUser> getCurrentUserInfo(String uid) async {
-    print(uid);
-    var x = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    return AppUser.fromDocument(x);
+  Stream<AppUser?> getCurrentUserInfo(String uid) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .snapshots()
+        .map(_getAppUserFromSnapshot);
+  }
+
+  AppUser? _getAppUserFromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
+    var data = doc.data();
+    if (data != null) {
+      return AppUser(
+          data['id']! as String,
+          data['email']! as String,
+          data['fullName']! as String,
+          data['userRole']! as String,
+          data['photoURL'],
+          Map<String, int>.from(data['cart']! as Map<dynamic, dynamic>));
+    } else {
+      return null;
+    }
   }
 
   Future createUser(AppUser user) async {
@@ -68,6 +100,6 @@ class FireStoreService {
   Future<void> updateProfilePhoto(String uid, String url) {
     return _userCollectionRef
         .doc(uid)
-        .set({'photoUrl': url}, SetOptions(merge: true));
+        .set({'photoURL': url}, SetOptions(merge: true));
   }
 }

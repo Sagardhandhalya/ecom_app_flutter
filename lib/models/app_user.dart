@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AppUser {
   final String id, email, fullName, userRole;
-  final String? photoUrl;
+  final String? photoURL;
   final Map<String, int> cart;
 
-  AppUser(this.id, this.email, this.fullName, this.userRole, this.photoUrl,
+  AppUser(this.id, this.email, this.fullName, this.userRole, this.photoURL,
       this.cart);
 
   factory AppUser.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc) {
@@ -15,7 +15,7 @@ class AppUser {
         data['email']! as String,
         data['fullName']! as String,
         data['userRole']! as String,
-        data['photoUrl'],
+        data['photoURL'],
         Map<String, int>.from(data['cart']! as Map<dynamic, dynamic>));
   }
   // AppUser.fromJson(Map<String, Object?> json)
@@ -34,7 +34,8 @@ class AppUser {
       'email': email,
       'fullName': fullName,
       'userRole': userRole,
-      'cart': cart
+      'cart': cart,
+      'photoURL': photoURL
     };
   }
 }

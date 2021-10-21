@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter101/components/custom_drawer.dart';
 import 'package:flutter101/components/snackbar.dart';
-import 'package:flutter101/screens/cart/cart_page.dart';
 import 'package:flutter101/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';

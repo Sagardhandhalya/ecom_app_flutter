@@ -39,6 +39,16 @@ class AuthService {
     try {
       var authResult = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      User? user = authResult.user;
+      if (user != null) {
+        FireStoreService(FirebaseFirestore.instance).createUser(AppUser(
+            user.uid,
+            user.email.toString(),
+            fullName.toString(),
+            'user',
+            'https://microsite.hcltech.com/manufacturing/imro/img/avatar.png',
+            {}));
+      }
       return 'success';
     } on FirebaseAuthException catch (e) {
       return e.message!;
@@ -67,7 +77,6 @@ class AuthService {
       }
     } on FirebaseAuthException catch (e) {
       print(e.message);
-      throw e;
     }
   }
 
