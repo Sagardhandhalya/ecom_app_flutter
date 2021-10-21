@@ -66,146 +66,139 @@ class _CartState extends State<Cart> {
             List<String> keyArr = userData.cart.keys.toList();
             List<int> valArr = userData.cart.values.toList();
 
-            return Column(
-              children: [
-                ListView.builder(
-                    itemCount: keyArr.length,
-                    padding: const EdgeInsets.all(5.0),
-                    itemBuilder: (context, i) {
-                      return Dismissible(
-                        key: UniqueKey(),
-                        onDismissed: (direction) {
-                          Provider.of<FireStoreService>(context, listen: false)
-                              .deleteFromTheCart(
-                                  uid!, userData.cart.keys.toList()[i]);
-                          const CustomSnackBar(
-                                  seconds: 4,
-                                  text: 'Item deleted',
-                                  type: 'success')
-                              .show(context);
-                        },
-                        background: Container(color: Colors.red),
-                        child: Container(
-                          margin: const EdgeInsets.all(9),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: StreamBuilder<Product?>(
-                                stream: fetchProduct(keyArr[i], context),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  }
-                                  if (snapshot.data != null) {
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+            return ListView.builder(
+                itemCount: keyArr.length,
+                padding: const EdgeInsets.all(5.0),
+                itemBuilder: (context, i) {
+                  return Dismissible(
+                    key: UniqueKey(),
+                    onDismissed: (direction) {
+                      Provider.of<FireStoreService>(context, listen: false)
+                          .deleteFromTheCart(
+                              uid!, userData.cart.keys.toList()[i]);
+                      const CustomSnackBar(
+                              seconds: 4, text: 'Item deleted', type: 'success')
+                          .show(context);
+                    },
+                    background: Container(color: Colors.red),
+                    child: Container(
+                      margin: const EdgeInsets.all(9),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: StreamBuilder<Product?>(
+                            stream: fetchProduct(keyArr[i], context),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              if (snapshot.data != null) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Image.network(
+                                      snapshot.data!.image,
+                                      width: 100,
+                                      height: 100,
+                                    ),
+                                    Column(
                                       children: [
-                                        Image.network(
-                                          snapshot.data!.image,
-                                          width: 100,
-                                          height: 100,
+                                        Text(
+                                          snapshot.data!.title,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6,
                                         ),
-                                        Column(
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Row(
                                           children: [
+                                            IconButton(
+                                                onPressed: () {
+                                                  Provider.of<FireStoreService>(
+                                                          context,
+                                                          listen: false)
+                                                      .updateQty(
+                                                          uid!,
+                                                          keyArr[i],
+                                                          true,
+                                                          valArr[i]);
+                                                },
+                                                icon: const Icon(
+                                                  Icons.add,
+                                                )),
                                             Text(
-                                              snapshot.data!.title,
+                                              '${valArr[i]}',
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .headline6,
+                                                  .bodyText1,
                                             ),
-                                            const SizedBox(
-                                              height: 2,
-                                            ),
-                                            Row(
-                                              children: [
-                                                IconButton(
-                                                    onPressed: () {
-                                                      Provider.of<FireStoreService>(
-                                                              context,
-                                                              listen: false)
-                                                          .updateQty(
-                                                              uid!,
-                                                              keyArr[i],
-                                                              true,
-                                                              valArr[i]);
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.add,
-                                                    )),
-                                                Text(
-                                                  '${valArr[i]}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1,
-                                                ),
-                                                IconButton(
-                                                    onPressed: () {
-                                                      Provider.of<FireStoreService>(
-                                                              context,
-                                                              listen: false)
-                                                          .updateQty(
-                                                              uid!,
-                                                              keyArr[i],
-                                                              false,
-                                                              valArr[i]);
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.remove))
-                                              ],
-                                            )
+                                            IconButton(
+                                                onPressed: () {
+                                                  Provider.of<FireStoreService>(
+                                                          context,
+                                                          listen: false)
+                                                      .updateQty(
+                                                          uid!,
+                                                          keyArr[i],
+                                                          false,
+                                                          valArr[i]);
+                                                },
+                                                icon: const Icon(Icons.remove))
                                           ],
-                                        ),
-                                        Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "\$ ${snapshot.data!.price * (valArr[i])}",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6,
-                                              ),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    Provider.of<FireStoreService>(
-                                                            context,
-                                                            listen: false)
-                                                        .deleteFromTheCart(
-                                                            uid!,
-                                                            userData.cart.keys
-                                                                .toList()[i]);
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.delete,
-                                                    color: Colors.red,
-                                                  ))
-                                            ])
+                                        )
                                       ],
-                                    );
-                                  }
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey.withOpacity(0.8),
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 5)),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-              ],
-            );
+                                    ),
+                                    Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "\$ ${snapshot.data!.price * (valArr[i])}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6,
+                                          ),
+                                          IconButton(
+                                              onPressed: () {
+                                                Provider.of<FireStoreService>(
+                                                        context,
+                                                        listen: false)
+                                                    .deleteFromTheCart(
+                                                        uid!,
+                                                        userData.cart.keys
+                                                            .toList()[i]);
+                                              },
+                                              icon: const Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                              ))
+                                        ])
+                                  ],
+                                );
+                              }
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.withOpacity(0.8),
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              offset: const Offset(0, 5)),
+                        ],
+                      ),
+                    ),
+                  );
+                });
           }),
     );
   }
