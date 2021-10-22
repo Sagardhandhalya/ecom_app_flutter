@@ -67,7 +67,10 @@ class FireStoreService {
 
   Future createUser(AppUser user) async {
     try {
-      await _userCollectionRef.doc(user.id).set(user.toJson());
+      var doc = await _userCollectionRef.doc(user.id).get();
+      if (!doc.exists) {
+        await _userCollectionRef.doc(user.id).set(user.toJson());
+      }
     } catch (e) {
       return e;
     }
