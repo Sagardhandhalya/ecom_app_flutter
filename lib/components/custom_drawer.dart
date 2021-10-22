@@ -14,7 +14,7 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String uid = Provider.of<User>(context, listen: false).uid;
+    String uid = Provider.of<User?>(context, listen: false)!.uid;
 
     return Drawer(
         child: ListView(
@@ -42,7 +42,7 @@ class CustomDrawer extends StatelessWidget {
           leading: const Icon(Icons.account_circle),
           title: const Text('Profile'),
           onTap: () {
-            Navigator.pushNamed(context, '/profile');
+            Navigator.pushNamed(context, 'profile_page');
           },
         ),
         ListTile(
@@ -74,6 +74,8 @@ class CustomDrawer extends StatelessWidget {
           ),
           onTap: () async {
             await context.read<AuthService>().logOut();
+            Navigator.pop(context);
+            Navigator.popAndPushNamed(context, '/');
           },
         ),
       ],

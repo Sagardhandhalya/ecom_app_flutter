@@ -8,10 +8,6 @@ class FireStoreService {
 
   FireStoreService(FirebaseFirestore instance);
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getUsersCart(String uid) {
-    return FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
-  }
-
   Product? _productFromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
     Map<String, dynamic>? data = doc.data();
     if (data != null) {
@@ -96,7 +92,6 @@ class FireStoreService {
   }
 
   // update profile photo of a user
-
   Future<void> updateProfilePhoto(String uid, String url) {
     return _userCollectionRef
         .doc(uid)

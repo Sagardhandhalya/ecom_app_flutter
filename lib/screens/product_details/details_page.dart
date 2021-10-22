@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/models/product.dart';
+import 'package:flutter101/services/analytics_service.dart';
 import 'package:flutter101/services/firestore_service.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../constant.dart';
 
@@ -16,6 +18,7 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // FirebaseCrashlytics.instance.crash();
     var size = MediaQuery.of(context).size;
     String uid = Provider.of<User>(context, listen: false).uid;
     final Color color = Color(product.color);
@@ -81,7 +84,7 @@ class DetailsPage extends StatelessWidget {
                                 ),
                                 child: IconButton(
                                   icon: const Icon(Icons.shopping_cart),
-                                  onPressed: () {
+                                  onPressed: () async {
                                     context
                                         .read<FireStoreService>()
                                         .addToCart(uid, productUid)
@@ -97,6 +100,17 @@ class DetailsPage extends StatelessWidget {
                                                   text:
                                                       'some error occured try again.',
                                                 ).show(context));
+                                    await context
+                                        .read<Analytics>()
+                                        .logEvent("some_custom_event");
+
+                                    await context
+                                        .read<Analytics>()
+                                        .logAddToCartEvent(
+                                            productUid,
+                                            product.title,
+                                            product.category,
+                                            product.price.toDouble());
                                   },
                                 ),
                               ),
@@ -168,9 +182,11 @@ class DetailsPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: kDefaultPaddin),
-                            Expanded(
-                              child: Hero(
-                                tag: product.id,
+                            Hero(
+                              tag: product.id,
+                              child: Container(
+                                width: 250,
+                                height: 250,
                                 child: Image.network(
                                   product.image,
                                   fit: BoxFit.fill,

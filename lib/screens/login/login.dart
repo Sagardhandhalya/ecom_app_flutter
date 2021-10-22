@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
           .read<AuthService>()
           .signIn(emailController.text, passwordController.text);
       if (status == 'success') {
-        await Navigator.pushNamed(context, '/');
+        // await Navigator.pushNamed(context, '/');
       } else {
         CustomSnackBar(seconds: 4, text: status, type: 'error').show(context);
         setState(() {

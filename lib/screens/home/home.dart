@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/cart');
+                Navigator.pushNamed(context, 'cart_page');
               },
               icon: const Icon(
                 Icons.shopping_cart_outlined,

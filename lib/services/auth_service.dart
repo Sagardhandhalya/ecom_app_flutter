@@ -12,28 +12,6 @@ class AuthService {
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  // Stream<AppUser?> get getCurrentUser =>
-  //     _auth.authStateChanges().map((User? user) {
-  //       debugPrint('Hi from getcurrentuser !!');
-  //       debugPrint(user.toString());
-  //       debugPrint((user != null).toString());
-
-  //       FirebaseFirestore.instance
-  //           .collection('users')
-  //           .doc(user != null ? user.uid : 'user')
-  //           .snapshots()
-  //           .map<AppUser?>((user) => _appUserFromSnapshot(user));
-  //     });
-
-  // AppUser? _appUserFromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
-  //   Map<String, dynamic>? user = doc.data();
-  //   debugPrint(user.toString());
-  //   return user != null
-  //       ? AppUser(user['id'], user['email'], user['fullName'], user['userRole'],
-  //           user['photoUrl'], Map<String, int>.from(user['cart']))
-  //       : null;
-  // }
-
   Future<String> signUp(
       String email, String password, String fullName, String userRole) async {
     try {
