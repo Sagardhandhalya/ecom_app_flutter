@@ -124,9 +124,10 @@ class _LoginState extends State<Login> {
                             child: Image.network(
                                 'http://pngimg.com/uploads/google/google_PNG19635.png',
                                 fit: BoxFit.cover)),
-                        onTap: () {
-                          Provider.of<AuthService>(context, listen: false)
+                        onTap: () async {
+                          await Provider.of<AuthService>(context, listen: false)
                               .signInwithGoogle();
+                          Navigator.pushReplacementNamed(context, 'home');
                         },
                       ),
                     ),
