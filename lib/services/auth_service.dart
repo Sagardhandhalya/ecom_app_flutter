@@ -9,6 +9,7 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   AuthService(this._auth);
 
+  User? get currentUser => _auth.currentUser;
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   Future<String> signUp(

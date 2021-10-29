@@ -58,10 +58,12 @@ class _ProfileState extends State<Profile> {
                 child: Center(
                   child: Container(
                     child: _profilePhoto != null
-                        ? Image.file(
-                            _profilePhoto!,
-                            width: width,
-                            height: 400,
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 20, top: 20),
+                            child: ClipOval(
+                              child: Image.file(_profilePhoto!,
+                                  width: width, height: 400, fit: BoxFit.cover),
+                            ),
                           )
                         : SizedBox(
                             width: width,

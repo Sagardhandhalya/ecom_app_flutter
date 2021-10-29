@@ -56,12 +56,9 @@ class _CategoryListState extends State<CategoryList> {
                 category[index],
                 style: const TextStyle(fontSize: 17),
               ),
-              const SizedBox(
-                height: 10,
-              ),
               Container(
                 height: 5,
-                width: 40,
+                width: 30,
                 color: index == _selected ? Colors.black87 : Colors.transparent,
               )
             ],

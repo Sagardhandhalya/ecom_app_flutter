@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter101/components/custom_drawer.dart';
 import 'package:flutter101/components/snackbar.dart';
+import 'package:flutter101/screens/product_details/product_detail.dart';
 import 'package:flutter101/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
@@ -62,10 +63,8 @@ class _HomeState extends State<Home> {
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Product>> snapshot) {
                     if (snapshot.hasError) {
-                      return const CustomSnackBar(
-                          seconds: 4,
-                          text: 'not able to load data',
-                          type: 'error');
+                      debugPrint(snapshot.error.toString());
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -109,7 +108,11 @@ class _HomeState extends State<Home> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => DetailsPage(
+                // builder: (context) => DetailsPage(
+                //       product: product,
+                //       productUid: product.id.toString(),
+                //     ),
+                builder: (context) => ProductDetail(
                       product: product,
                       productUid: product.id.toString(),
                     ),
