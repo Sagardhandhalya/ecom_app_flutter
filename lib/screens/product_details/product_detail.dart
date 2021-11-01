@@ -1,5 +1,7 @@
+import 'package:badges/badges.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter101/components/cart_badge.dart';
 import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/constant.dart';
 import 'package:flutter101/models/cart.dart';
@@ -18,10 +20,14 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int cartCount = Provider.of<CartData>(context).products.length;
     var size = MediaQuery.of(context).size;
     String uid = Provider.of<User>(context, listen: false).uid;
     final Color color = Color(product.color);
     return Scaffold(
+      appBar: AppBar(
+        actions: [CartBadge(cartCount: cartCount)],
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(
           Icons.add_shopping_cart_outlined,
@@ -30,12 +36,20 @@ class ProductDetail extends StatelessWidget {
         backgroundColor: color,
         onPressed: () async {
           try {
-            await context.read<CartData>().addToCart(product);
-            const CustomSnackBar(
-              seconds: 4,
-              type: '',
-              text: 'product added to the cart',
-            ).show(context);
+            String res = await context.read<CartData>().addToCart(product);
+            if (res == 'added') {
+              const CustomSnackBar(
+                seconds: 3,
+                type: '',
+                text: 'product is already added in cart',
+              ).show(context);
+            } else {
+              const CustomSnackBar(
+                seconds: 4,
+                type: '',
+                text: 'product added to the cart',
+              ).show(context);
+            }
           } catch (e) {
             debugPrint(e.toString());
             const CustomSnackBar(
@@ -54,6 +68,7 @@ class ProductDetail extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading: false,
             floating: true,
             elevation: 5,
             expandedHeight: 300.0,

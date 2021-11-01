@@ -32,14 +32,20 @@ class CartData extends ChangeNotifier {
   }
 
   Future<String> addToCart(Product product) async {
-    try {
-      await firestore.addToCart(uid, product.id);
-      products.add(product);
-      qtyMap[product.id] = 1;
-      notifyListeners();
-      return '1';
-    } catch (e) {
-      return 'Something went wrong try again.';
+    var pros = products.where((element) => element.id == product.id).toList();
+    debugPrint(pros.toString());
+    if (pros.isNotEmpty) {
+      return 'added';
+    } else {
+      try {
+        await firestore.addToCart(uid, product.id);
+        products.add(product);
+        qtyMap[product.id] = 1;
+        notifyListeners();
+        return '1';
+      } catch (e) {
+        return 'Something went wrong try again.';
+      }
     }
   }
 

@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter101/components/cart_badge.dart';
 import 'package:flutter101/components/custom_drawer.dart';
 import 'package:flutter101/components/snackbar.dart';
+import 'package:flutter101/models/cart.dart';
 import 'package:flutter101/screens/product_details/product_detail.dart';
 import 'package:flutter101/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import '../home/components/category_list.dart';
-import '../product_details/details_page.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:badges/badges.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -32,23 +34,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    int cartCount = Provider.of<CartData>(context).products.length;
     return Scaffold(
         appBar: AppBar(
           title: const Text(
             'Products',
           ),
           elevation: 0,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'cart_page');
-              },
-              icon: const Icon(
-                Icons.shopping_cart_outlined,
-              ),
-              tooltip: 'Go to cart page',
-            )
-          ],
+          actions: [CartBadge(cartCount: cartCount)],
         ),
         drawer: const CustomDrawer(),
         body: Padding(

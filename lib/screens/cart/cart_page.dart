@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter101/components/cart_badge.dart';
 import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/models/app_user.dart';
 import 'package:flutter101/models/cart.dart';
@@ -46,6 +47,7 @@ class _CartState extends State<Cart> {
             'cart page',
           ),
           elevation: 0,
+          actions: [CartBadge(cartCount: ps.length)],
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
