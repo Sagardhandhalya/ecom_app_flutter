@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter101/models/app_user.dart';
 import 'package:flutter101/services/firestore_service.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -9,6 +11,7 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   AuthService(this._auth);
 
+  User? get currentUser => _auth.currentUser;
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   Future<String> signUp(
@@ -43,6 +46,30 @@ class AuthService {
         idToken: googleSignInAuthentication.idToken,
       );
       var res = await _auth.signInWithCredential(credential);
+      User? user = res.user;
+      if (user != null) {
+        FireStoreService(FirebaseFirestore.instance).createUser(AppUser(
+            user.uid,
+            user.email.toString(),
+            user.displayName.toString(),
+            'user',
+            user.photoURL, {}));
+      }
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+    return 'success';
+  }
+
+  Future<String?> signInwithFacebook() async {
+    try {
+      final result = await FacebookAuth.instance.login();
+
+      final AuthCredential facebookCredential =
+          FacebookAuthProvider.credential(result.accessToken!.token);
+
+      var res = await _auth.signInWithCredential(facebookCredential);
+      debugPrint(res.toString());
       User? user = res.user;
       if (user != null) {
         FireStoreService(FirebaseFirestore.instance).createUser(AppUser(

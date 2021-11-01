@@ -40,7 +40,7 @@ class CustomSnackBar extends StatelessWidget {
       content: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
             child: Icon(
               _getIcon(),
               color: Colors.white,
@@ -55,7 +55,7 @@ class CustomSnackBar extends StatelessWidget {
       ),
       duration: Duration(seconds: seconds),
       backgroundColor: _getColor(),
-      behavior: SnackBarBehavior.floating,
+      behavior: SnackBarBehavior.fixed,
     );
   }
 

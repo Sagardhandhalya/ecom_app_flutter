@@ -36,17 +36,6 @@ class _ProfileState extends State<Profile> {
             ),
             tooltip: 'Go to cart page',
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'cart_page');
-              },
-              icon: const Icon(
-                Icons.shopping_cart_outlined,
-              ),
-              tooltip: 'Go to cart page',
-            )
-          ],
         ),
         body: Center(
           child: Container(
@@ -58,10 +47,12 @@ class _ProfileState extends State<Profile> {
                 child: Center(
                   child: Container(
                     child: _profilePhoto != null
-                        ? Image.file(
-                            _profilePhoto!,
-                            width: width,
-                            height: 400,
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 20, top: 20),
+                            child: ClipOval(
+                              child: Image.file(_profilePhoto!,
+                                  width: width, height: 400, fit: BoxFit.cover),
+                            ),
                           )
                         : SizedBox(
                             width: width,

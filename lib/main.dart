@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'screens/Home/home.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'services/messaging_service.dart';
+import 'models/cart.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,10 +24,15 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
-  static Analytics _analytics = Analytics(FirebaseAnalytics());
-  // This widget is the root of your application.
+  static final Analytics _analytics = Analytics(FirebaseAnalytics());
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -47,12 +53,18 @@ class MyApp extends StatelessWidget {
               initialData: null,
               create: (context) =>
                   context.read<AuthService>().authStateChanges),
+          ChangeNotifierProvider<CartData>(create: (_) {
+            return CartData(
+              products: [],
+              qtyMap: {},
+            );
+          })
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: MyTheme.lightTheme(context),
           home: const AuthContainer(),
-          navigatorObservers: <NavigatorObserver>[_analytics.observer],
+          navigatorObservers: <NavigatorObserver>[MyApp._analytics.observer],
           routes: {
             'home': (context) => const Home(),
             'login_page': (context) => const Login(),
@@ -70,6 +82,7 @@ class AuthContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
     if (firebaseUser != null) {
+      context.read<CartData>().updateProducts();
       return const Home();
     } else {
       return const Login();

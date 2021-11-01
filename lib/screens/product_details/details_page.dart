@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter101/components/snackbar.dart';
+import 'package:flutter101/models/cart.dart';
 import 'package:flutter101/models/product.dart';
 import 'package:flutter101/services/analytics_service.dart';
 import 'package:flutter101/services/firestore_service.dart';
@@ -85,21 +86,35 @@ class DetailsPage extends StatelessWidget {
                                 child: IconButton(
                                   icon: const Icon(Icons.shopping_cart),
                                   onPressed: () async {
-                                    context
-                                        .read<FireStoreService>()
-                                        .addToCart(uid, productUid)
-                                        .then((value) => const CustomSnackBar(
-                                              seconds: 4,
-                                              type: '',
-                                              text: 'product added to the cart',
-                                            ).show(context))
-                                        .catchError(
-                                            (error) => const CustomSnackBar(
-                                                  seconds: 4,
-                                                  type: 'error',
-                                                  text:
-                                                      'some error occured try again.',
-                                                ).show(context));
+                                    try {
+                                      await context
+                                          .read<CartData>()
+                                          .addToCart(product);
+                                      const CustomSnackBar(
+                                        seconds: 4,
+                                        type: '',
+                                        text: 'product added to the cart',
+                                      ).show(context);
+                                    } catch (e) {
+                                      const CustomSnackBar(
+                                        seconds: 4,
+                                        type: 'error',
+                                        text: 'some error occured try again.',
+                                      ).show(context);
+                                    }
+
+                                    // .then((value) => const CustomSnackBar(
+                                    //       seconds: 4,
+                                    //       type: '',
+                                    //       text: 'product added to the cart',
+                                    //     ).show(context))
+                                    // .catchError(
+                                    //     (error) => const CustomSnackBar(
+                                    //           seconds: 4,
+                                    //           type: 'error',
+                                    //           text:
+                                    //               'some error occured try again.',
+                                    //         ).show(context));
                                     await context
                                         .read<Analytics>()
                                         .logEvent("some_custom_event");

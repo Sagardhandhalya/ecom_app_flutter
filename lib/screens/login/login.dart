@@ -146,9 +146,20 @@ class _LoginState extends State<Login> {
                             child: Image.network(
                                 'https://www.citypng.com/public/uploads/small/115959785735k3xem706hpfn8xbwxmxvniimtfuxtbng596dmpcylbi7ckrlbew28e6oodqlocogsjo8hg0g5j2ofx0km0lu1ynotna9tsu5xdk.png',
                                 fit: BoxFit.cover)),
-                        onTap: () {
-                          Provider.of<AuthService>(context, listen: false)
-                              .signInwithGoogle();
+                        onTap: () async {
+                          String? result = await Provider.of<AuthService>(
+                                  context,
+                                  listen: false)
+                              .signInwithFacebook();
+                          if (result != 'success') {
+                            CustomSnackBar(
+                                    seconds: 2,
+                                    text: result.toString(),
+                                    type: 'error')
+                                .show(context);
+                          } else {
+                            Navigator.pushReplacementNamed(context, 'home');
+                          }
                         },
                       ),
                     ),
