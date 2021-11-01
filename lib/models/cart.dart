@@ -14,10 +14,12 @@ class CartData extends ChangeNotifier {
     required this.products,
     required this.qtyMap,
   }) {
+    print(uid);
     updateProducts();
   }
 
   void updateProducts() async {
+    uid = FirebaseAuth.instance.currentUser!.uid;
     qtyMap = await firestore.getUserCart(uid);
     products = await firestore.getListOfCartProduct(uid);
     notifyListeners();
@@ -33,7 +35,6 @@ class CartData extends ChangeNotifier {
 
   Future<String> addToCart(Product product) async {
     var pros = products.where((element) => element.id == product.id).toList();
-    debugPrint(pros.toString());
     if (pros.isNotEmpty) {
       return 'added';
     } else {

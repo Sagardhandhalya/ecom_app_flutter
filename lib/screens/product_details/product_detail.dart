@@ -31,21 +31,21 @@ class ProductDetail extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(
           Icons.add_shopping_cart_outlined,
-          size: 30,
+          size: 25,
         ),
-        backgroundColor: color,
+        backgroundColor: Colors.purple,
         onPressed: () async {
           try {
             String res = await context.read<CartData>().addToCart(product);
             if (res == 'added') {
               const CustomSnackBar(
-                seconds: 3,
+                seconds: 2,
                 type: '',
                 text: 'product is already added in cart',
               ).show(context);
             } else {
               const CustomSnackBar(
-                seconds: 4,
+                seconds: 2,
                 type: '',
                 text: 'product added to the cart',
               ).show(context);

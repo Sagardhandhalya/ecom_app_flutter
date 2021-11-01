@@ -101,10 +101,6 @@ class _HomeState extends State<Home> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                // builder: (context) => DetailsPage(
-                //       product: product,
-                //       productUid: product.id.toString(),
-                //     ),
                 builder: (context) => ProductDetail(
                       product: product,
                       productUid: product.id.toString(),
@@ -126,9 +122,6 @@ class _HomeState extends State<Home> {
             decoration: BoxDecoration(
                 color: Color(product.color),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
-          ),
-          const SizedBox(
-            height: 10,
           ),
           Text(
             product.title,

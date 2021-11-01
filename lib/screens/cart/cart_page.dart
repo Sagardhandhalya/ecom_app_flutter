@@ -1,11 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter101/components/cart_badge.dart';
-import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/models/app_user.dart';
 import 'package:flutter101/models/cart.dart';
 import 'package:flutter101/models/product.dart';
-import 'package:flutter101/services/firestore_service.dart';
+import 'package:flutter101/screens/product_details/product_detail.dart';
 import 'package:provider/provider.dart';
 
 class Cart extends StatefulWidget {
@@ -65,10 +63,26 @@ class _CartState extends State<Cart> {
                   itemBuilder: (context, i) => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Image.network(
-                            ps[i].image,
-                            width: 100,
-                            height: 100,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProductDetail(
+                                            product: ps[i],
+                                            productUid: ps[i].id.toString(),
+                                          ),
+                                      settings: RouteSettings(
+                                          name: "${ps[i].title} page")));
+                            },
+                            child: Hero(
+                              tag: ps[i].id,
+                              child: Image.network(
+                                ps[i].image,
+                                width: 100,
+                                height: 100,
+                              ),
+                            ),
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
