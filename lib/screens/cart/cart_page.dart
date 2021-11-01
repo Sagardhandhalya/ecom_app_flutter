@@ -18,14 +18,19 @@ class _CartState extends State<Cart> {
   Stream<AppUser?>? _pStream;
   String? uid;
 
-  Stream<AppUser?> _getCartProductSteam(BuildContext context) {
-    uid ??= Provider.of<User?>(context, listen: false)?.uid;
-    return _pStream ??=
-        Provider.of<FireStoreService>(context).getCurrentUserInfo(uid!);
-  }
+  // Stream<AppUser?> _getCartProductSteam(BuildContext context) {
+  //   uid ??= Provider.of<User?>(context, listen: false)?.uid;
+  //   return _pStream ??=
+  //       Provider.of<FireStoreService>(context).getCurrentUserInfo(uid!);
+  // }
 
-  Stream<Product?> fetchProduct(String id, BuildContext context) {
-    return Provider.of<FireStoreService>(context).getProductFromId(id);
+  // Stream<Product?> fetchProduct(String id, BuildContext context) {
+  //   return Provider.of<FireStoreService>(context).getProductFromId(id);
+  // }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override

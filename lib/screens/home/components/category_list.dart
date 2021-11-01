@@ -54,13 +54,13 @@ class _CategoryListState extends State<CategoryList> {
             children: [
               Text(
                 category[index],
-                style: const TextStyle(fontSize: 17),
+                style: index == _selected
+                    ? const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      )
+                    : const TextStyle(fontSize: 17),
               ),
-              Container(
-                height: 5,
-                width: 30,
-                color: index == _selected ? Colors.black87 : Colors.transparent,
-              )
             ],
           ),
         ),

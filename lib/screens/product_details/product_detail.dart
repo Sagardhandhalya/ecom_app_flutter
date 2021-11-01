@@ -58,9 +58,12 @@ class ProductDetail extends StatelessWidget {
             elevation: 5,
             expandedHeight: 300.0,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                product.image,
-                fit: BoxFit.contain,
+              background: Hero(
+                tag: product.id,
+                child: Image.network(
+                  product.image,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),

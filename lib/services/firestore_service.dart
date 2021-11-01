@@ -8,6 +8,32 @@ class FireStoreService {
 
   FireStoreService(FirebaseFirestore instance);
 
+  Future<Product> _getProductFromdoc(String pid) async {
+    var p =
+        await FirebaseFirestore.instance.collection('products').doc(pid).get();
+    return Product.fromDocument(p);
+  }
+
+  Future<Map<String, int>> getUserCart(String uid) async {
+    var userF = await _userCollectionRef.doc(uid).get()
+        as DocumentSnapshot<Map<String, dynamic>>;
+    AppUser? user = _getAppUserFromSnapshot(userF);
+    return user != null ? user.cart : {};
+  }
+
+  Future<List<Product>> getListOfCartProduct(String uid) async {
+    var userF = await _userCollectionRef.doc(uid).get()
+        as DocumentSnapshot<Map<String, dynamic>>;
+    AppUser? user = _getAppUserFromSnapshot(userF);
+    if (user != null) {
+      var productFutures =
+          user.cart.keys.map((pid) => _getProductFromdoc(pid)).toList();
+      return Future.wait(productFutures);
+    } else {
+      return [];
+    }
+  }
+
   Product? _productFromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
     Map<String, dynamic>? data = doc.data();
     if (data != null) {

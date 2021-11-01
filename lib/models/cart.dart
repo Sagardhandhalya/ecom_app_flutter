@@ -10,20 +10,17 @@ class CartData extends ChangeNotifier {
   FireStoreService firestore = FireStoreService(FirebaseFirestore.instance);
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
-  // CartData({
-  //   required this.products,
-  //   required this.qtyMap,
-  // });
+  CartData({
+    required this.products,
+    required this.qtyMap,
+  }) {
+    updateProducts();
+  }
 
-  CartData(
-      {required List<Product> products, required Map<String, int> qtyMap}) {
-    // ignore: prefer_initializing_formals
-    this.products = products;
-    // ignore: prefer_initializing_formals
-    this.qtyMap = qtyMap;
-    // Future.delayed(Duration(seconds: 3))
-    //     .then((value) => print('Hi nice to see you.'))
-    //     .catchError(() => print('hi'));
+  void updateProducts() async {
+    qtyMap = await firestore.getUserCart(uid);
+    products = await firestore.getListOfCartProduct(uid);
+    notifyListeners();
   }
 
   double get grandTotal {
