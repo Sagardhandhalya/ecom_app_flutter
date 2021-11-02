@@ -29,12 +29,15 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 80,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: category.length,
-        itemBuilder: buildCategory,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 22),
+      child: SizedBox(
+        height: 35,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: category.length,
+          itemBuilder: buildCategory,
+        ),
       ),
     );
   }
@@ -46,22 +49,20 @@ class _CategoryListState extends State<CategoryList> {
             changeCategory(category[index]);
           });
         },
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: kDefaultPaddin, right: kDefaultPaddin, left: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                category[index],
-                style: index == _selected
-                    ? const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      )
-                    : const TextStyle(fontSize: 17),
-              ),
-            ],
+        child: Container(
+          decoration: index == _selected
+              ? const BoxDecoration(
+                  color: Colors.purple,
+                  borderRadius: BorderRadius.all(Radius.circular(100)))
+              : null,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Text(
+              category[index],
+              style: index == _selected
+                  ? const TextStyle(fontSize: 17, color: Colors.white)
+                  : const TextStyle(fontSize: 17),
+            ),
           ),
         ),
       );

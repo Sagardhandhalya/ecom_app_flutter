@@ -14,9 +14,9 @@ class CartBadge extends StatelessWidget {
     return Badge(
       animationType: BadgeAnimationType.scale,
       badgeColor: Colors.purple,
-      position: BadgePosition.topEnd(top: -7, end: -1),
+      position: BadgePosition.topEnd(top: 0, end: 2),
       badgeContent: Text(cartCount > 9 ? '9+' : cartCount.toString(),
-          style: const TextStyle(color: Colors.white)),
+          style: const TextStyle(color: Colors.white, fontSize: 10)),
       child: IconButton(
         onPressed: () {
           Navigator.pushNamed(context, 'cart_page');

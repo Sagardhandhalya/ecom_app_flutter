@@ -56,12 +56,9 @@ class CustomDrawer extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.list_alt),
           title: const Text('My orders'),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.group),
-          title: const Text('About Us'),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, 'orders_page');
+          },
         ),
         ListTile(
           leading: const Icon(

@@ -18,6 +18,12 @@ class CartData extends ChangeNotifier {
     updateProducts();
   }
 
+  Future<void> clearCart() async {
+    products = [];
+    qtyMap = {};
+    await firestore.resetCart(uid);
+  }
+
   void updateProducts() async {
     uid = FirebaseAuth.instance.currentUser!.uid;
     qtyMap = await firestore.getUserCart(uid);

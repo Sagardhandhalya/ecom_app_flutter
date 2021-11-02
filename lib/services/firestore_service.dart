@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter101/models/app_user.dart';
+import 'package:flutter101/models/order.dart';
 import 'package:flutter101/models/product.dart';
 
 class FireStoreService {
   final CollectionReference _userCollectionRef =
       FirebaseFirestore.instance.collection('users');
+  final CollectionReference _orderCollectionRef =
+      FirebaseFirestore.instance.collection('orders');
 
   FireStoreService(FirebaseFirestore instance);
 
@@ -108,6 +111,12 @@ class FireStoreService {
     }, SetOptions(merge: true));
   }
 
+  Future<void> resetCart(String uid) async {
+    return _userCollectionRef
+        .doc(uid)
+        .set({'cart': {}}, SetOptions(merge: true));
+  }
+
   Future<void> deleteFromTheCart(String uid, String p) async {
     return _userCollectionRef.doc(uid).set({
       'cart': {p: FieldValue.delete()}
@@ -125,5 +134,29 @@ class FireStoreService {
     return _userCollectionRef
         .doc(uid)
         .set({'photoURL': url}, SetOptions(merge: true));
+  }
+
+  // place new order
+  Future<void> placeOrder(Map<String, dynamic> order) async {
+    try {
+      await _orderCollectionRef.add(order);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  List<Order> _orderListFromSnapShot(QuerySnapshot<Object?> q) {
+    return q.docs
+        .map((doc) => Order.fromDocumentSnapshot(
+            doc as QueryDocumentSnapshot<Map<String, dynamic>>))
+        .toList();
+  }
+
+  Stream<List<Order>> getMyOrders(String uid) {
+    return _orderCollectionRef
+        .where('ownerId', isEqualTo: uid)
+        .orderBy('orderDate')
+        .snapshots()
+        .map<List<Order>>(_orderListFromSnapShot);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter101/components/cart_badge.dart';
 import 'package:flutter101/components/custom_drawer.dart';
 import 'package:flutter101/components/snackbar.dart';
+import 'package:flutter101/constant.dart';
 import 'package:flutter101/models/cart.dart';
 import 'package:flutter101/screens/product_details/product_detail.dart';
 import 'package:flutter101/services/firestore_service.dart';
@@ -127,7 +128,7 @@ class _HomeState extends State<Home> {
             product.title,
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          Text("\$ ${product.price}",
+          Text("${product.price}$kcurrency",
               style: Theme.of(context).textTheme.bodyText1)
         ],
       ),

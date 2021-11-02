@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter101/screens/cart/cart_page.dart';
+import 'package:flutter101/screens/checkout/checkout_page.dart';
 import 'package:flutter101/screens/login/login.dart';
+import 'package:flutter101/screens/myorders/orders.dart';
 import 'package:flutter101/screens/profile/profile.dart';
 import 'package:flutter101/services/analytics_service.dart';
 import 'package:flutter101/services/auth_service.dart';
@@ -69,7 +71,9 @@ class _MyAppState extends State<MyApp> {
             'home': (context) => const Home(),
             'login_page': (context) => const Login(),
             'cart_page': (context) => const Cart(),
-            'profile_page': (context) => const Profile()
+            'profile_page': (context) => const Profile(),
+            'checkout_page': (context) => const CheckoutPage(),
+            'orders_page': (context) => const Orders(),
           },
         ));
   }

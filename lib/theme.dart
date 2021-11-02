@@ -13,7 +13,7 @@ class MyTheme {
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: const TextTheme(
-            button: TextStyle(fontSize: 17),
+            button: TextStyle(fontSize: 17, fontFamily: 'Cairo'),
             bodyText1: TextStyle(fontSize: 17, fontFamily: 'Cairo'),
             bodyText2: TextStyle(fontSize: 17, fontFamily: 'Cairo'),
             headline4: TextStyle(fontFamily: 'Cairo'),

@@ -103,6 +103,9 @@ class ProductDetail extends StatelessWidget {
                           Text(
                             product.title,
                             style: Theme.of(context).textTheme.headline4,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            softWrap: true,
                           ),
                           const Text(
                             "Aristocratic Hand Bag",
@@ -116,7 +119,7 @@ class ProductDetail extends StatelessWidget {
                             style: Theme.of(context).textTheme.headline4,
                           ),
                           const Text(
-                            '\$',
+                            kcurrency,
                             style: TextStyle(fontSize: 23),
                           ),
                         ],
