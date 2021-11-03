@@ -137,9 +137,11 @@ class _CartState extends State<Cart> {
                       )
                     ],
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'checkout_page');
-                  },
+                  onPressed: cartModal.products.length == 0
+                      ? null
+                      : () {
+                          Navigator.pushNamed(context, 'checkout_page');
+                        },
                 ),
               ],
             ),

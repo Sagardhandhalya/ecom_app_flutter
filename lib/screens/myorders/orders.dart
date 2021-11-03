@@ -96,10 +96,17 @@ class _OrdersState extends State<Orders> {
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Order>> orderSnap) {
                     if (orderSnap.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
+                      return const SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
                     }
                     if (orderSnap.hasError) {
-                      return const Text('Failed to load data');
+                      return const SizedBox(
+                          child: Text('Failed to load data'), height: 20);
                     }
 
                     List<Order> orders = orderSnap.data!;
