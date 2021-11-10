@@ -87,6 +87,7 @@ class AuthContainer extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
     if (firebaseUser != null) {
       context.read<CartData>().updateProducts();
+      manageToken();
       return const Home();
     } else {
       return const Login();

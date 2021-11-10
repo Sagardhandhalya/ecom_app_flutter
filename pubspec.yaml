@@ -36,6 +36,8 @@ dependencies:
   transparent_image: ^2.0.0
   image_picker: ^0.8.4+2
   badges: ^2.0.1
+  http: ^0.13.4
+  flutter_local_notifications: ^9.0.3
   
   # firebase dev
   firebase_core: ^1.6.0

@@ -11,3 +11,5 @@ Map<String, String> OrderStatus = {
   'processing': 'Processing',
   'cancelled': 'Cancelled'
 };
+
+const kAppServerUrl = 'https://fcm-app-server-searce.herokuapp.com';

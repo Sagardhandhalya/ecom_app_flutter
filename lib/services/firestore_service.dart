@@ -137,11 +137,13 @@ class FireStoreService {
   }
 
   // place new order
-  Future<void> placeOrder(Map<String, dynamic> order) async {
+  Future<String> placeOrder(Map<String, dynamic> order) async {
     try {
-      await _orderCollectionRef.add(order);
+      var res = await _orderCollectionRef.add(order);
+      return res.id;
     } catch (e) {
       print(e.toString());
+      return '';
     }
   }
 

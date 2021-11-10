@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter101/constant.dart';
@@ -141,40 +144,49 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ownerId: uid,
                           items: convertCartToOrderItem(context),
                           orderDate: DateTime.now());
-                      await fireStore.placeOrder(ord.toJson());
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: Row(
-                            children: const [
-                              Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
+                      String orderId = await fireStore.placeOrder(ord.toJson());
+
+                      if (orderId != '') {
+                        var url = Uri.parse('$kAppServerUrl/notify');
+                        var response = await http.post(url,
+                            headers: {'Content-Type': 'application/json'},
+                            body: jsonEncode(
+                                {'userId': uid, 'orderId': orderId}));
+                        if (response.statusCode == 200) {
+                          debugPrint(response.body);
+                          await context.read<CartData>().clearCart();
+                        } else {
+                          debugPrint(response.statusCode.toString());
+                          debugPrint('A network error occurred');
+                        }
+                      } else {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: Row(
+                              children: const [
+                                Icon(
+                                  Icons.error,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text('Not able to process your order.')
+                              ],
+                            ),
+                            content:
+                                const Text('please try again after some time.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Cancel'),
+                                child: const Text('Cancel'),
                               ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text('Order placed Successfully')
                             ],
                           ),
-                          content: const Text(
-                              'You can check and track your order in my order tab'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                await context.read<CartData>().clearCart();
-                                Navigator.pushReplacementNamed(
-                                    context, 'orders_page');
-                              },
-                              child: const Text('My Orders'),
-                            ),
-                          ],
-                        ),
-                      );
+                        );
+                      }
                     }),
               ],
             ),
