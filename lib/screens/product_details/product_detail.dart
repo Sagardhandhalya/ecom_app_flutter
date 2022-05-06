@@ -59,8 +59,6 @@ class ProductDetail extends StatelessWidget {
             ).show(context);
           }
 
-          await context.read<Analytics>().logEvent("some_custom_event");
-
           await context.read<Analytics>().logAddToCartEvent(productUid,
               product.title, product.category, product.price.toDouble());
         },

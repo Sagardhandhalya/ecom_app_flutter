@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter101/services/analytics_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -154,6 +155,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 {'userId': uid, 'orderId': orderId}));
                         if (response.statusCode == 200) {
                           debugPrint(response.body);
+                          await context.read<Analytics>().logOrders(
+                              context.read<CartData>().grandTotal,
+                              uid,
+                              context.read<CartData>().qtyMap);
                           await context.read<CartData>().clearCart();
                         } else {
                           debugPrint(response.statusCode.toString());

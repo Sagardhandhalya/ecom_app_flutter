@@ -6,6 +6,7 @@ import 'package:flutter101/components/snackbar.dart';
 import 'package:flutter101/constant.dart';
 import 'package:flutter101/models/cart.dart';
 import 'package:flutter101/screens/product_details/product_detail.dart';
+import 'package:flutter101/services/analytics_service.dart';
 import 'package:flutter101/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
@@ -98,7 +99,10 @@ class _HomeState extends State<Home> {
     var product = snapshot[index];
 
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        await context
+            .read<Analytics>()
+            .logViewProduct(product.id, product.title, product.category);
         Navigator.push(
             context,
             MaterialPageRoute(

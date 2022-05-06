@@ -177,11 +177,10 @@ class _ProfileState extends State<Profile> {
                 type: 'success')
             .show(context);
       });
+    } else {
+      const CustomSnackBar(
+              seconds: 2, text: 'No image is selected, try ga', type: 'error')
+          .show(context);
     }
-    // else {
-    //   const CustomSnackBar(
-    //           seconds: 2, text: 'No image is selected, try ga', type: 'error')
-    //       .show(context);
-    // }
   }
 }

@@ -22,4 +22,18 @@ class Analytics {
         price: price,
         quantity: 1);
   }
+
+  Future<void> logViewProduct(String id, String name, String cat) async {
+    await firebaseAnalytics.logViewItem(
+        itemId: id, itemName: name, itemCategory: cat);
+  }
+
+  Future<void> logOrders(
+      double total, String userId, Map<String, int> items) async {
+    await firebaseAnalytics.logEvent(name: 'Order_placed', parameters: {
+      "items": items.toString(),
+      "userID": userId,
+      "total": total
+    });
+  }
 }
