@@ -147,18 +147,18 @@ class FireStoreService {
     }
   }
 
-  List<Order> _orderListFromSnapShot(QuerySnapshot<Object?> q) {
-    return q.docs
-        .map((doc) => Order.fromDocumentSnapshot(
-            doc as QueryDocumentSnapshot<Map<String, dynamic>>))
-        .toList();
-  }
+  // List<Order> _orderListFromSnapShot(QuerySnapshot<Object?> q) {
+  //   return q.docs
+  //       .map((doc) => Order.fromDocumentSnapshot(
+  //           doc as QueryDocumentSnapshot<Map<String, dynamic>>))
+  //       .toList();
+  // }
 
-  Stream<List<Order>> getMyOrders(String uid) {
-    return _orderCollectionRef
-        .where('ownerId', isEqualTo: uid)
-        .orderBy('orderDate')
-        .snapshots()
-        .map<List<Order>>(_orderListFromSnapShot);
-  }
+  // Stream<List<Order>> getMyOrders(String uid) {
+  //   return _orderCollectionRef
+  //       .where('ownerId', isEqualTo: uid)
+  //       .orderBy('orderDate')
+  //       .snapshots()
+  //       .map<List<Order>>(_orderListFromSnapShot);
+  // }
 }

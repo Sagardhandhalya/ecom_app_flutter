@@ -28,7 +28,7 @@ Future<void> main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
-  static final Analytics _analytics = Analytics(FirebaseAnalytics());
+  // static final Analytics _analytics = Analytics(FirebaseAnalytics());
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -47,9 +47,9 @@ class _MyAppState extends State<MyApp> {
               FirebaseFirestore.instance,
             ),
           ),
-          Provider<Analytics>(
-            create: (_) => Analytics(FirebaseAnalytics()),
-          ),
+          // Provider<Analytics>(
+          //   create: (_) => Analytics(FirebaseAnalytics()),
+          // ),
           Provider<Storage>(create: (_) => Storage(FirebaseStorage.instance)),
           StreamProvider<User?>(
               initialData: null,
@@ -66,14 +66,14 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           theme: MyTheme.lightTheme(context),
           home: const AuthContainer(),
-          navigatorObservers: <NavigatorObserver>[MyApp._analytics.observer],
+          // navigatorObservers: <NavigatorObserver>[MyApp._analytics.observer],
           routes: {
             'home': (context) => const Home(),
             'login_page': (context) => const Login(),
             'cart_page': (context) => const Cart(),
             'profile_page': (context) => const Profile(),
             'checkout_page': (context) => const CheckoutPage(),
-            'orders_page': (context) => const Orders(),
+            // 'orders_page': (context) => const Orders(),
           },
         ));
   }

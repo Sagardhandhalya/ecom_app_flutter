@@ -59,8 +59,8 @@ class ProductDetail extends StatelessWidget {
             ).show(context);
           }
 
-          await context.read<Analytics>().logAddToCartEvent(productUid,
-              product.title, product.category, product.price.toDouble());
+          // await context.read<Analytics>().logAddToCartEvent(productUid,
+          //     product.title, product.category, product.price.toDouble());
         },
       ),
       body: CustomScrollView(

@@ -155,10 +155,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 {'userId': uid, 'orderId': orderId}));
                         if (response.statusCode == 200) {
                           debugPrint(response.body);
-                          await context.read<Analytics>().logOrders(
-                              context.read<CartData>().grandTotal,
-                              uid,
-                              context.read<CartData>().qtyMap);
+                          // await context.read<Analytics>().logOrders(
+                          //     context.read<CartData>().grandTotal,
+                          //     uid,
+                          //     context.read<CartData>().qtyMap);
                           await context.read<CartData>().clearCart();
                         } else {
                           debugPrint(response.statusCode.toString());

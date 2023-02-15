@@ -100,9 +100,9 @@ class _HomeState extends State<Home> {
 
     return GestureDetector(
       onTap: () async {
-        await context
-            .read<Analytics>()
-            .logViewProduct(product.id, product.title, product.category);
+        // await context
+        //     .read<Analytics>()
+        //     .logViewProduct(product.id, product.title, product.category);
         Navigator.push(
             context,
             MaterialPageRoute(

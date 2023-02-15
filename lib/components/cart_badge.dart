@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as bgs;
 import 'package:flutter/material.dart';
 
 class CartBadge extends StatelessWidget {
@@ -11,10 +11,10 @@ class CartBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Badge(
-      animationType: BadgeAnimationType.scale,
-      badgeColor: Colors.purple,
-      position: BadgePosition.topEnd(top: 0, end: 2),
+    return bgs.Badge(
+      // animationType: bgs.BadgeAnimationType.scale,
+      // badgeColor: Colors.purple,
+      position: bgs.BadgePosition.topEnd(top: 0, end: 2),
       badgeContent: Text(cartCount > 9 ? '9+' : cartCount.toString(),
           style: const TextStyle(color: Colors.white, fontSize: 10)),
       child: IconButton(

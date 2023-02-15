@@ -115,17 +115,17 @@ class DetailsPage extends StatelessWidget {
                                     //           text:
                                     //               'some error occured try again.',
                                     //         ).show(context));
-                                    await context
-                                        .read<Analytics>()
-                                        .logEvent("some_custom_event");
+                                    // await context
+                                    //     .read<Analytics>()
+                                    //     .logEvent("some_custom_event");
 
-                                    await context
-                                        .read<Analytics>()
-                                        .logAddToCartEvent(
-                                            productUid,
-                                            product.title,
-                                            product.category,
-                                            product.price.toDouble());
+                                    // await context
+                                    //     .read<Analytics>()
+                                    //     .logAddToCartEvent(
+                                    //         productUid,
+                                    //         product.title,
+                                    //         product.category,
+                                    //         product.price.toDouble());
                                   },
                                 ),
                               ),
